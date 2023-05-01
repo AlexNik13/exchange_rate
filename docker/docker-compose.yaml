@@ -1,0 +1,17 @@
+version: '3'
+services:
+  exchange_rates:
+    image: postgres:14.7
+    restart: always
+    container_name: exchange_rates
+    environment:
+      POSTGRES_USER: postgrest
+      POSTGRES_PASSWORD: postgrest
+      POSTGRES_DB: exchange_rates
+    ports:
+      - "5433:5432"
+    volumes:
+      - "c:/path/db/postgrest/exchange_rates:/var/lib/postgresql/data"
+
+volumes:
+  exchange_rates_data:

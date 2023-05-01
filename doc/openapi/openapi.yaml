@@ -1,0 +1,78 @@
+openapi: "3.0.3"
+
+
+info:
+  title: "MY CRM"
+  description: "MY CRM API documentation"
+  contact:
+    name: "MY CRM"
+    url: "http://localhost:8095"
+    email: "office@uapp-llc.com"
+  version: "1.0.0"
+
+
+servers:
+  - url: "http://localhost:8095"
+    description: "Local server"
+
+paths:
+
+  # Session
+
+  /sessions/authenticate:
+    $ref: "openapi-session.yaml#/sessions"
+  /sessions/refresh-token:
+    $ref: "openapi-session.yaml#/refresh-token"
+
+  # Profile
+
+  /profiles:
+    $ref: "openapi-profile.yaml#/profiles"
+  /profiles/{id}:
+    $ref: "openapi-profile.yaml#/profiles-id"
+  /profiles/{id}/addresses:
+    $ref: "openapi-profile.yaml#/profiles-id-addresses"
+  /{id}/addresses/{addressId}:
+    $ref: "openapi-profile.yaml#/profiles-id-addresses-address-id"
+
+  #User
+  /users/registration:
+    $ref: "openapi-user.yaml#/registration"
+
+components:
+  securitySchemes:
+    Authorization:
+      type: "http"
+      scheme: "bearer"
+      bearerFormat: "JWT"
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        details:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+security:
+  - Authorization: [ ]
+
+tags:
+
+  - name: Session
+    description: Session operations
+
+  - name: Profile
+    description: Profile operation
+
+  - name: User
+    description: User operation
+
+
+

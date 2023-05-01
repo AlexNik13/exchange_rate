@@ -1,0 +1,96 @@
+sessions:
+  post:
+    tags:
+      - Session
+    operationId: SessionVerify
+    summary: Authenticate user with email and password
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/LoginRequest'
+    responses:
+      200:
+        description: Successful authentication
+        content:
+          application/json:
+            schema:
+              $ref: '#/TokensResponse'
+      409:
+        description: Conflict (wrong email or password)
+        content:
+          application/json:
+            schema:
+              $ref: 'openapi.yaml#/components/schemas/ErrorResponse'
+            example:
+              status: 409
+              message: "Wrong password or email: example@gmail.com"
+              details: ""
+              timestamp: "2023-04-20T12:00:00Z"
+
+refresh-token:
+  post:
+    tags:
+      - Session
+    operationId: SessionRefresh
+    summary: Refresh access token using a refresh token
+    parameters:
+      - name: Refresh-Token
+        in: header
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Successful token refresh
+        content:
+          application/json:
+            schema:
+              $ref: '#/TokensResponse'
+      404:
+        description: Refresh token not found
+        content:
+          application/json:
+            schema:
+              $ref: 'openapi.yaml#/components/schemas/ErrorResponse'
+            example:
+              status: 404
+              message: "Session not found by refresh token: token"
+              details: ""
+              timestamp: "2023-04-20T12:00:00Z"
+      403:
+        description: Refresh token expired
+        content:
+          application/json:
+            schema:
+              $ref: 'openapi.yaml#/components/schemas/ErrorResponse'
+            example:
+              status: 403
+              message: "Refresh token expired: token"
+              details: ""
+              timestamp: "2023-04-20T12:00:00Z"
+
+
+#shema
+
+LoginRequest:
+  type: object
+  required:
+    - email
+    - password
+  properties:
+    email:
+      type: string
+      format: email
+    password:
+      type: string
+      minLength: 6
+
+TokensResponse:
+  type: object
+  properties:
+    accessToken:
+      type: string
+    refreshToken:
+      type: string
