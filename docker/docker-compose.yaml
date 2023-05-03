@@ -3,7 +3,7 @@ services:
   exchange_rates:
     image: postgres:14.7
     restart: always
-    container_name: exchange_rates
+    container_name: exchange_rates_postgres
     environment:
       POSTGRES_USER: postgrest
       POSTGRES_PASSWORD: postgrest
@@ -12,6 +12,17 @@ services:
       - "5433:5432"
     volumes:
       - "c:/path/db/postgrest/exchange_rates:/var/lib/postgresql/data"
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: exchange_rates_swagger_ui
+    restart: always
+    ports:
+      - "5444:8080"
+    volumes:
+      - ..\doc\openapi:/usr/share/nginx/html/openapi
+    environment:
+      API_URL: openapi/openapi.yaml
 
 volumes:
   exchange_rates_data:
